@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Water Level Monitor</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #4facfe, #00f2fe);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
+
+    .water-level {
+      font-size: 60px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .updated-time {
+      margin-top: 10px;
+      font-size: 16px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Water Level Monitor</h1>
+    <div class="water-level" id="waterLevel">--</div>
+    <div class="updated-time" id="updatedTime">Loading...</div>
+  </div>
+
+   <script>
+    async function fetchWaterLevel() {
+      try {
+        const response = await fetch('https://task-management-backend-vhcq.onrender.com/api/v1/water-level');
+        const result = await response.json();
+
+        if (result.data) {
+          document.getElementById('waterLevel').innerText = `${result.data.waterLevel} cm`;
+          const updatedAt = new Date(result.data.updatedDate);
+          document.getElementById('updatedTime').innerText = `Last updated: ${updatedAt.toLocaleTimeString()}`;
+        } else {
+          document.getElementById('waterLevel').innerText = '--';
+          document.getElementById('updatedTime').innerText = 'No data available';
+        }
+      } catch (error) {
+        console.error('Error fetching water level:', error);
+        document.getElementById('waterLevel').innerText = '--';
+        document.getElementById('updatedTime').innerText = 'Error fetching data';
+      }
+    }
+
+    // Fetch every 1 second
+    setInterval(fetchWaterLevel, 1000);
+
+    // Fetch immediately on page load
+    fetchWaterLevel();
+  </script>
+</body>
+</html>
