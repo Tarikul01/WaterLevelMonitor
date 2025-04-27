@@ -63,7 +63,7 @@
 	  console.log("Result",result);
 
       if (result.data) {
-        document.getElementById('waterLevel').innerText = `${result.data.waterLevel} cm`;
+        document.getElementById('waterLevel').innerText = `${result.data.waterLevel} %`;
         const updatedAt = new Date(result.data.updatedDate);
         document.getElementById('updatedTime').innerText = `Last updated: ${updatedAt.toLocaleTimeString()}`;
       } else {
